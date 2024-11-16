@@ -96,17 +96,6 @@ export default function Home() {
       setIsOpen(false);
     }
   }, [isPending]);
-
-  async function swapLogic(walletAddress: string, price: string) {
-    const user = await getUserByUserID(walletAddress);
-    const orderBook = user.orderBook;
-
-    for (const order of orderBook) {
-      if (order.tradeMin <= price && order.tradeMax >= price) {
-        // init swap here
-        await reduceTransactionCount({userID: walletAddress, orderID: order.orderID})
-    }
-  }
   
   useEffect(() => {
     if (Object.keys(parsedResponse).length > 0) {
@@ -457,5 +446,4 @@ export default function Home() {
       )}
     </>
   );
-}
 }

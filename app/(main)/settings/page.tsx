@@ -5,7 +5,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect, useState } from "react";
 import AIConfig from "@/components/AIConfig";
 import MobileAIConfig from "@/components/MobileAIConfig";
-import { getUserByUserID } from "@/lib/db_actions/user-actions";
+import { addOrdertoOrderBook, getUserByUserID, reduceTransactionCount } from "@/lib/db_actions/user-actions";
 import { set } from "mongoose";
 
 const mockConfig = {
@@ -24,6 +24,18 @@ const Settings = () => {
   const [aiSignal, setAISignal] = useState("");
   const [AIConfigs, setAIConfigs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  async function swapLogic(walletAddress: string, price: string) {
+    const user = await getUserByUserID(walletAddress);
+    const orderBook = user.orderBook;
+
+    for (const order of orderBook) {
+      if (order.tradeMin <= price && order.tradeMax >= price) {
+        // init swap here
+        await reduceTransactionCount({userID: walletAddress, orderID: order.orderID})
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchUser = async (walletAddress: string) => {
