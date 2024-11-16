@@ -6,6 +6,7 @@ import { CgSpinner } from "react-icons/cg";
 import { useAccount, useChainId, useReadContract } from "wagmi";
 import { config } from "@/utils/config";
 import PortfolioCard from "@/components/PortfolioCard";
+import LineChartPopUp from "@/components/LineChartPopUp";
 
 const CHAIN_ID = 137;
 const WALLET_ADDRESS = "0x67BDB62C0FF92187490DD34ed1BCEEdD3e47d517";
@@ -35,6 +36,8 @@ export default function Home() {
   const [userProfit, setuserProfit] = useState<number>(0);
   const [userROI, setUserROI] = useState<number>(0);
   const [portfolioFetched, setPortfolioFetched] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [tokenAddress, setTokenAddress] = useState<string>("");
   const account = useAccount({ config });
   const chainId = useChainId();
 
@@ -120,6 +123,20 @@ export default function Home() {
     }
   }, [portfolio, loading]);
 
+  useEffect(() => {
+    console.log("Token Address", tokenAddress);
+    if (tokenAddress === "") {
+      return;
+    }
+    setIsOpen(true);
+  }, [tokenAddress]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTokenAddress("");
+    }
+  }, [isOpen]);
+
   return (
     <>
       <div className="w-full h-screen flex-col flex items-center gap-4 max-md:-mt-16 pb-16">
@@ -164,15 +181,16 @@ export default function Home() {
 
         {/* Mock ethereum portfolio */}
         {portfolio.length == 0 && !loading && finished && (
-          <PortfolioCard portfolio={mockEthData}/>
+          <PortfolioCard portfolio={mockEthData} setTokenAddress={setTokenAddress} />
         )}
 
         {/* Actual portfolio */}
         {!loading &&
           finished &&
           portfolio.map((portofolio, index) => (
-            <PortfolioCard key={index} portfolio={portofolio} />
+            <PortfolioCard key={index} portfolio={portofolio} setTokenAddress={setTokenAddress} />
           ))}
+        <LineChartPopUp isOpen={isOpen} setIsOpen={setIsOpen} tokenAddress={tokenAddress} />
       </div>
     </>
   );
