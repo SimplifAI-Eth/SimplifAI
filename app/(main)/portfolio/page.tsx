@@ -202,7 +202,7 @@ export default function Home() {
                 {userROI || "+ 0"}%
               </p>
             </div>
-            <Button onClick={handleSwitch}>Switch Wallet</Button>
+            <Button onClick={handleSwitch}>{getAIWallet ? "Switch to Private Wallet" : "Switch to AI Wallet"}</Button>
           </div>
         )}
 

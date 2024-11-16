@@ -66,7 +66,7 @@ const PortfolioCard = ({ portfolio, setTokenAddress }: PortfolioCardProps) => {
   return loading ? (
     <div></div>
   ) : (
-    <div className="w-[90%] text-xs sm:text-md md:text-base md:w-1/4 card-gradient rounded-xl px-4 py-3 flex justify-between items-center drop-shadow-xl font-semibold hover:cursor-pointer" onClick={handleGetChart}>
+    <div className="w-[90%] text-xs sm:text-md md:text-base md:w-1/3 card-gradient rounded-xl px-4 my-6 py-3 flex justify-between items-center drop-shadow-xl font-semibold hover:cursor-pointer" onClick={handleGetChart}>
       <div className="w-[70%] h-full flex items-center gap-4 py-2">
         <div className="w-1/4 bg-transparent rounded-full aspect-square relative">
           <Image
