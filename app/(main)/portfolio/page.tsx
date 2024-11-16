@@ -43,8 +43,8 @@ export default function Home() {
       return;
     }
     // Search for all tokens held by the user
-    const tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
-    // const tokenDetails = await getTokenDetails(account.address, chainId);
+    //const tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
+    const tokenDetails = await getTokenDetails(account.address, chainId);
     console.log(tokenDetails);
     if (!tokenDetails) {
       return;
