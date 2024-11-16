@@ -11,6 +11,7 @@ import RetriveNotificationButton from "@/components/RetriveNotificationButton";
 import AddOrderTest from "@/components/AddOrderTest";
 import { Line } from "recharts";
 import LineChartPopUp from "@/components/LineChartPopUp";
+import { reduceTransactionCount } from "@/lib/db_actions/user-actions";
 
 export default function Home() {
   const { primaryWallet } = useDynamicContext();
@@ -24,6 +25,18 @@ export default function Home() {
       setWalletAddress(primaryWallet.address);
     }
   }, [primaryWallet]);
+
+  // useEffect(() => {
+  //   const test = async () => {
+  //     await reduceTransactionCount({
+  //       userID: "0xc17aeA1c1D9dE8aF1cE61bafCF83914c69F38C10",
+  //       orderID: "6738d1aa2fcb266e39ca5c82",
+  //     })
+  //   }
+
+  //   test();
+  //   console.log("i did the reduce thing")
+  // }, [])
 
   const mockTokenData = [
     { time: 1731657600, value: 3064.87819940756 },

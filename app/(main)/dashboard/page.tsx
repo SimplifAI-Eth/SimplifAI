@@ -60,6 +60,22 @@ export default function Home() {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
+    async function swapLogic(walletAddress: string, price: string, signal: string) {
+      const user = await getUserByUserID(walletAddress);
+      const orderBook = user.orderBook;
+  
+      for (const order of orderBook) {
+        if (order.tradeMin <= price && order.tradeMax >= price && order.transactionCount > 0) {
+          if(signal == order.orderType || (signal == "HOLD" && order.orderType == "BUY")) {
+          // init swap here
+          await reduceTransactionCount({
+            userID: walletAddress,
+            orderID: order.orderID,
+          });
+          }
+        }
+      }
+
   const {
     data: swapHash,
     error: swapError,
@@ -106,22 +122,6 @@ export default function Home() {
       setIsOpen(false);
     }
   }, [isPending]);
-
-  async function swapLogic(walletAddress: string, price: string, signal: string) {
-    const user = await getUserByUserID(walletAddress);
-    const orderBook = user.orderBook;
-
-    for (const order of orderBook) {
-      if (order.tradeMin <= price && order.tradeMax >= price && order.transactionCount > 0) {
-        if(signal == order.orderType || (signal == "HOLD" && order.orderType == "BUY")) {
-        // init swap here
-        await reduceTransactionCount({
-          userID: walletAddress,
-          orderID: order.orderID,
-        });
-        }
-      }
-    }
 
     useEffect(() => {
       if (Object.keys(parsedResponse).length > 0) {
