@@ -119,6 +119,7 @@ export const reduceTransactionCount = async ({
 
     const updatedOrder = user.orderBook[orderIndex];
     updatedOrder.transactionCount -= 1;
+    updatedOrder.lastTimeStampSinceTransaction = new Date()
 
     const updatedUser = await Users.findByIdAndUpdate(
       user._id,
