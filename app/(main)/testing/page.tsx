@@ -9,11 +9,14 @@ import MessageButton from "@/components/MessageButton";
 import { Component } from "@/components/LineChart";
 import RetriveNotificationButton from "@/components/RetriveNotificationButton";
 import AddOrderTest from "@/components/AddOrderTest";
+import { Line } from "recharts";
+import LineChartPopUp from "@/components/LineChartPopUp";
 
 export default function Home() {
   const { primaryWallet } = useDynamicContext();
   const [walletAddress, setWalletAddress] = useState("");
   const [connected, setConnected] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (primaryWallet && !walletAddress) {
