@@ -17,7 +17,7 @@ const USDCLogo = "/usdc.svg";
 const AIConfig = ({ config }: { config: AIConfigParams }) => {
   return (
     <>
-      <div className="flex flex-col md:w-[33%] w-[80%] h-1/3 pt-2 pb-2 font-semibold backdrop-blur-sm card-gradient rounded-xl drop-shadow-lg hover:drop-shadow-2xl text-[#9d9d9d]">
+      <div className="flex flex-col md:w-[40%] w-[80%] h-1/3 pt-2 pb-2 font-semibold backdrop-blur-sm card-gradient rounded-xl drop-shadow-lg hover:drop-shadow-2xl text-[#9d9d9d]">
         
         {/* top half */}
         <div className="flex w-full h-[40%]">
