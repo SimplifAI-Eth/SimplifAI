@@ -49,9 +49,57 @@ export default function Home() {
     { time: 1731729600, value: 3135.8846084431266 },
     { time: 1731733200, value: 3133.4981726554383 },
     { time: 1731736800, value: 3118.4911484177096 },
-    { time: 1731740400, value: 3119.640831632943 }
-  ];
+    { time: 1731740400, value: 3119.640831632943 },
+  ];
 
+  const [orders, setOrders] = useState<any>();
+
+  const handleClick = () => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/getBalance`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setOrders(data);
+    };
+
+    fetchData();
+  };
+
+  const handleClick2 = () => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/cashout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
+            amount: 0.00001,
+            tokenSymbol: "ETH-SEPOLIA",
+          }),
+        }
+      );
+    };
+
+    fetchData();
+  };
+
+  useEffect(() => {
+    console.log("gotten data in testing page:", orders.data.balances[0].amount);
+  }, [orders]);
 
   return (
     <>
@@ -62,8 +110,8 @@ export default function Home() {
             <MessageButton connectedWallet={walletAddress} />
             <RetriveNotificationButton connectedWallet={walletAddress} />
             <AddOrderTest />
-            <button onClick={() => setIsOpen(true)}>Open Line Chart</button>
-            {/* <LineChartPopUp isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+            <button onClick={handleClick}>get balance</button>
+            <button onClick={handleClick2}>cashout</button>
           </div>
         )}
         {/* <Component chartData={mockTokenData} /> */}

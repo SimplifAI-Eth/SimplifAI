@@ -3,24 +3,30 @@
 import { DynamicWallet } from "@/components/DynamicWallet";
 import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUserByUserID } from "@/lib/db_actions/user-actions";
 
 const Header = () => {
   const isLoggedIn = useIsLoggedIn();
   const { primaryWallet } = useDynamicContext();
+  const [user, setUser] = useState<any>();
 
   const fetchUser = async (userID: string) => {
-    return await getUserByUserID(userID);
+    const data = await getUserByUserID(userID);
+    setUser(data);
   };
 
   useEffect(() => {
     if (isLoggedIn && primaryWallet) {
       console.log("wallet is", primaryWallet);
-      const user = fetchUser(primaryWallet.address);
-      console.log("logged user is :", user);
+      // const user = fetchUser(primaryWallet.address);
+      fetchUser(primaryWallet.address);
     }
   }, [isLoggedIn, primaryWallet]);
+
+  useEffect(() => {
+    console.log("user is", user);
+  }, [user]);
 
   return (
     <>
