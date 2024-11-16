@@ -86,6 +86,12 @@ export default function Home() {
       }
     }
   }, [isPending, swapIsPending]);
+  useEffect(() => {
+    if(isPending == false){
+      setIsExecuting(false);
+      setIsOpen(false);
+    }
+  }, [isPending]);
 
   useEffect(() => {
     if (Object.keys(parsedResponse).length > 0) {
@@ -116,7 +122,8 @@ export default function Home() {
       return;
     }
     setUser(user);
-    // console.log(user);
+    console.log("User Found")
+    console.log(user);
 
     const args = processArguments(parsedResponse.tool_calls[0]);
     setProcessedArguments(args);
@@ -262,10 +269,10 @@ export default function Home() {
       txData.tradeMin = buyMin;
       txData.tradeMax = buyMax;
       if (tokenToBuy && tokenToBuy === "ETH") {
-        txData.orderType = "Buy";
+        txData.orderType = "BUY";
         txData.quantity = specifiedAmmount;
       } else if (tokenToSell == "ETH" || tokenToBuy == "USDC") {
-        txData.orderType = "Sell";
+        txData.orderType = "SELL";
         if (buyMin) {
           txData.quantity = specifiedAmmount / buyMin;
         } else {
@@ -279,10 +286,10 @@ export default function Home() {
       txData.tradeMin = sellMin;
       txData.tradeMax = sellMax;
       if (tokenToSell && tokenToSell === "ETH") {
-        txData.orderType = "Sell";
+        txData.orderType = "SELL";
         txData.quantity = specifiedAmmount;
       } else if (tokenToSell == "USDC" || tokenToBuy == "ETH") {
-        txData.orderType = "Buy";
+        txData.orderType = "BUY";
         if (sellMin) {
           txData.quantity = specifiedAmmount / sellMin;
         } else {
@@ -310,7 +317,7 @@ export default function Home() {
         // console.log(txData);
         // console.log("Transferring ERC-20 Token");
         const parsedAmount = BigInt(
-          txData.specifiedAmmount * Math.pow(10, txData.transferToken.decimals)
+          txData.transferAmount * Math.pow(10, txData.transferToken.decimals)
         );
         // console.log("Transfered Amount:", parsedAmount);
 
@@ -370,8 +377,8 @@ export default function Home() {
       }
       setErrorMessage("");
     } catch (error) {
+      console.log(error);
       alert("Error Happened");
-      // console.log(error);
     }
   }
 
@@ -403,11 +410,11 @@ export default function Home() {
             <div className="hidden w-full h-full md:flex justify-center items-center">
               <DesktopRecordButton setParsedResponse={setParsedResponse} />
             </div>
-            <div>
+            {/*<div>
               {Object.keys(processedArguments).length > 0 && (
                 <p>{JSON.stringify(processedArguments, null, 2)}</p>
               )}
-            </div>
+            </div>*/}
 
             <ActionErrorPopUp
               message={errorMessage}

@@ -86,8 +86,8 @@ const TransferCard = ({
             <div className="flex items-center justify-end">
               <h1 className="">{`${receiverWalletAddress.slice(
                 0,
-                5
-              )}...${receiverWalletAddress.slice(-3)}`}</h1>
+                8
+              )}...${receiverWalletAddress.slice(-4)}`}</h1>
             </div>
           </div>
         </div>
