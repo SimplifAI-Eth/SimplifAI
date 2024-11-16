@@ -23,7 +23,7 @@ import {
 } from "wagmi";
 import { ERC20ABI } from "@/utils/abi";
 import { getApproval, getSwapTransaction } from "@/utils/oneinch";
-import { addOrdertoOrderBook } from "@/lib/db_actions/user-actions";
+import { addOrdertoOrderBook, getUserByUserID, reduceTransactionCount } from "@/lib/db_actions/user-actions";
 import sendMessage from "@/utils/sendMes";
 
 export default function Home() {
@@ -97,6 +97,17 @@ export default function Home() {
     }
   }, [isPending]);
 
+  async function swapLogic(walletAddress: string, price: string) {
+    const user = await getUserByUserID(walletAddress);
+    const orderBook = user.orderBook;
+
+    for (const order of orderBook) {
+      if (order.tradeMin <= price && order.tradeMax >= price) {
+        // init swap here
+        await reduceTransactionCount({userID: walletAddress, orderID: order.orderID})
+    }
+  }
+  
   useEffect(() => {
     if (Object.keys(parsedResponse).length > 0) {
       openConfirmation(parsedResponse);
@@ -108,6 +119,7 @@ export default function Home() {
     setErrorMessage(message);
     setIsErrorOpen(true);
   }
+
 
   async function openConfirmation(parsedResponse: any) {
     console.log("Processing Confirmation");
@@ -445,4 +457,5 @@ export default function Home() {
       )}
     </>
   );
+}
 }
