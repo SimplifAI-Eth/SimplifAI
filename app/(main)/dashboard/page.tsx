@@ -24,6 +24,7 @@ import {
 import { ERC20ABI } from "@/utils/abi";
 import { getApproval, getSwapTransaction } from "@/utils/oneinch";
 import { addOrdertoOrderBook } from "@/lib/db_actions/user-actions";
+import sendMessage from "@/utils/sendMes";
 
 export default function Home() {
   const { primaryWallet } = useDynamicContext();
@@ -67,7 +68,9 @@ export default function Home() {
   // Update Status once transaction confirmed
   useEffect(() => {
     if (isPending == false) {
+      sendMessage({receiverAdr:account.address as string, message:`You have successfully swapped ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverName}.`});
       setIsExecuting(false);
+      setIsOpen(false);
     }
   }, [isPending]);
   useEffect(() => {
@@ -82,6 +85,7 @@ export default function Home() {
         setIsApproved(false);
         setIsSwapping(false);
         setIsExecuting(false);
+        sendMessage({receiverAdr:account.address as string, message:`You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol} token.`});
         setIsOpen(false);
       }
     }

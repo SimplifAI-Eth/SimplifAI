@@ -38,6 +38,7 @@ const Settings = () => {
         },
       });
       const data = await response.json();
+      const {price, signal, timestamp} = data;
       console.log("gotten data:", data);
       setAISignal(data);
     };
