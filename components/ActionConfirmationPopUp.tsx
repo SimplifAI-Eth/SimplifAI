@@ -41,6 +41,7 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
   const hasToolCall = 'tool_calls' in response;
   const [isTransfer, setIsTransfer] = useState<boolean>(false);
   const [isSwap, setIsSwap] = useState<boolean>(false);
+  const [isSwapping, setIsSwapping] = useState<boolean>(false);
   const [isSettingAI, setIsSettingAI] = useState<boolean>(false);
   const [type, setType] = useState<string>("");
 
@@ -76,6 +77,7 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
       }
       else if(args.function === "settingAI"){
         console.log("Setting AI");
+        console.log(txData);
         if(txData){
           setIsSettingAI(true);
         }
@@ -87,11 +89,6 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
       console.log(error);
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    console.log("Printing the txData");
-    console.log(txData);
-  }, [txData]);
 
   const customStyles = {
     overlay: {
@@ -123,6 +120,9 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
     setAcceptAction(true);
     let args = processArguments(response.tool_calls[0]);
     setProcessedArguments(args);
+    if(isSwap){
+      setIsSwapping(!isSwapping);
+    }
   }
   //receiverName, receiverWalletAddress, transferToken, transferAmount
 
@@ -142,7 +142,7 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
                 Confirm Transaction
               </h1>
             </div>
-            <div className="flex w-full justify-around">
+            {/*<div className="flex w-full justify-around">
               <button
                 onClick={() => {
                   setType("transfer");
@@ -173,7 +173,7 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
               >
                 AI
               </button>
-            </div>
+            </div>*/}
             <div className="w-full ">
               {isTransfer ? (
                 <TransferCard
@@ -184,18 +184,18 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
                 />
               ) : isSwap ? (
                 <SwapCard
-                  tokenSwapFrom={swapDummyData.tokenSwapFrom}
-                  tokenSwapTo={swapDummyData.tokenSwapTo}
-                  tokenSwapFromAmount={swapDummyData.tokenSwapFromAmount}
+                  tokenSwapFrom={txData.tokenToSell}
+                  tokenSwapTo={txData.tokenToBuy}
+                  tokenSwapFromAmount={txData.amount}
                 />
               ) : isSettingAI ? (
                 <AI 
-                  tradeMin={aiDummyData.tradeMin} 
-                  tradeMax={aiDummyData.tradeMax}
-                  orderType={aiDummyData.orderType}
-                  quantity={aiDummyData.quantity}
-                  transactionCount={aiDummyData.transactionCount}
-                  lastTimeStampSinceTransaction={aiDummyData.lastTimeStampSinceTransaction}
+                  tradeMin={txData.tradeMin} 
+                  tradeMax={txData.tradeMax}
+                  orderType={txData.orderType}
+                  quantity={txData.quantity}
+                  transactionCount={txData.transactionCount}
+                  lastTimeStampSinceTransaction={txData.lastTimeStampSinceTransaction}
                 />
               ) : (
                 "Unknown Transaction"
@@ -207,7 +207,7 @@ const ActionConfirmationPopUp = ({response, isOpen, setIsOpen, setAcceptAction, 
               </RedButton>
               <div className="border border-[#2ed3b7] rounded-xl">
                 <Button onClick={isExecuting ? () => {} : handleAcceptAction}>
-                  <h1 className="text-xl">{isExecuting? "Loading":"Accept"}</h1>
+                  <h1 className="text-xl">{isExecuting? "Loading": isSwapping? "Swap": "Approve"}</h1>
                 </Button>
               </div>
             </div>

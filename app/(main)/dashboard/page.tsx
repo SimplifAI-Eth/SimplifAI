@@ -82,9 +82,10 @@ export default function Home() {
         setIsApproved(false);
         setIsSwapping(false);
         setIsExecuting(false);
+        setIsOpen(false);
       }
     }
-  }, [swapIsPending]);
+  }, [isPending, swapIsPending]);
 
   useEffect(() => {
     if (Object.keys(parsedResponse).length > 0) {
@@ -99,7 +100,7 @@ export default function Home() {
   }
 
   async function openConfirmation(parsedResponse: any) {
-    // console.log("Processing Confirmation");
+    console.log("Processing Confirmation");
     const hasToolCall = "tool_calls" in parsedResponse;
     if (!hasToolCall) {
       initializeError("Invalid Prompt");
