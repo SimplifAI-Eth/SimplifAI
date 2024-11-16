@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ETHADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-const USDCADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+const USDCADDRESS = "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359";
 
 const chainId = 137;
-const token1 = ETHADDRESS;
+const token1 = USDCADDRESS;
 
 export async function GET(req: NextRequest ) {
     const { searchParams } = new URL(req.url);
@@ -20,7 +19,7 @@ export async function GET(req: NextRequest ) {
         return NextResponse.json({ error: 'ONEINCH_API_KEY environment variable is not defined' }, { status: 500 });
     }
 
-    const endpoint = `https://api.1inch.dev/charts/v1.0/chart/line/${token1}/${tokenAddress}/24H/${chainId}`;
+    const endpoint = `https://api.1inch.dev/charts/v1.0/chart/line/${tokenAddress}/${token1}/24H/${chainId}`;
     try {
         const chart = await fetch(endpoint, {
             headers: { Authorization: `Bearer ${ONEINCH_API_KEY}` }
