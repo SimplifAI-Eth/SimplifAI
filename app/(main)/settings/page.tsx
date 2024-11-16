@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
 import ToggleNotification from "@/components/ToggleNotification";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect, useState } from "react";
 import AIConfig from "@/components/AIConfig";
 import MobileAIConfig from "@/components/MobileAIConfig";
-
+import { getUserByUserID } from "@/lib/db_actions/user-actions";
+import { set } from "mongoose";
 
 const mockConfig = {
   tradeMin: 100,
@@ -13,19 +14,29 @@ const mockConfig = {
   orderType: "BUY",
   quantity: 0.0001,
   transactionCount: 3,
-  lastTimeStampSinceTransaction: new Date()
-}
+  lastTimeStampSinceTransaction: new Date(),
+};
 
 const Settings = () => {
   const { primaryWallet } = useDynamicContext();
   const [walletAddress, setWalletAddress] = useState("");
   const [connected, setConnected] = useState(false);
   const [aiSignal, setAISignal] = useState("");
+  const [AIConfigs, setAIConfigs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchUser = async (walletAddress: string) => {
+      const user = await getUserByUserID(walletAddress);
+      setAIConfigs(user.orderBook);
+    };
+
     if (primaryWallet && !walletAddress) {
       setConnected(true);
       setWalletAddress(primaryWallet.address);
+
+      fetchUser(primaryWallet.address);
+      setLoading(false);
     }
   }, [primaryWallet]);
 
@@ -38,7 +49,7 @@ const Settings = () => {
         },
       });
       const data = await response.json();
-      const {price, signal, timestamp} = data;
+      const { price, signal, timestamp } = data;
       console.log("gotten data:", data);
       setAISignal(data);
     };
@@ -51,26 +62,28 @@ const Settings = () => {
   }, []);
 
   return (
-    <>
-    <div className="h-full w-full pb-8 mb-16 flex">
-      <div className="w-full h-screen flex-col flex items-center pb-8 mb-16">
-        {/* <p>{data}</p> */}
-        {connected && (
+    <div className="h-full w-full pb-16 mb-24 flex">
+      <div className="w-full h-full flex-col flex items-center pb-8 mb-16">
+        {connected && !loading && (
           <div className="w-full h-full p-4 md:flex flex-col gap-8 items-center hidden">
             <ToggleNotification connectedWallet={walletAddress} />
-            <AIConfig config={mockConfig} />
+            {AIConfigs.map((config, index) => (
+              <AIConfig key={index} config={config} />
+            ))}
           </div>
         )}
-        {connected && (
+        {loading && <p>Loading AI configuration</p>}
+        {connected && !loading && (
           <div className="w-full h-full -mt-16 flex flex-col gap-8 items-center md:hidden">
             <ToggleNotification connectedWallet={walletAddress} />
-            <MobileAIConfig config={mockConfig} />
+            {AIConfigs.map((config, index) => (
+              <MobileAIConfig key={index} config={config} />
+            ))}
           </div>
         )}
       </div>
     </div>
-    </>
-  )
-}
+  );
+};
 
 export default Settings;

@@ -20,10 +20,10 @@ const AIConfig = ({ config }: { config: AIConfigParams }) => {
       <div className="flex flex-col md:w-[40%] w-[80%] h-1/3 pt-2 pb-2 font-semibold backdrop-blur-sm card-gradient rounded-xl drop-shadow-lg hover:drop-shadow-2xl text-[#9d9d9d]">
         
         {/* top half */}
-        <div className="flex w-full h-[40%]">
+        <div className="flex w-full h-[40%] items-center justify-center">
           {/* Token Swap thing */}
           <div className="flex gap-2 w-full h-full p-4">
-            <div className="h-full w-fit flex aspect-square relative">
+            <div className="h-1/2 w-full flex aspect-square relative">
               <Image
                 src={ETHLogo}
                 fill
@@ -32,10 +32,10 @@ const AIConfig = ({ config }: { config: AIConfigParams }) => {
                 className=""
                 />
             </div>
-              <div className="h-full w-fit flex aspect-square relative items-center justify-center text-white text-4xl">
+              <div className="h-full w-full flex aspect-square relative items-center justify-center text-white text-4xl">
               <FaArrowRightArrowLeft />
               </div>
-            <div className="h-full w-fit flex aspect-square relative">
+            <div className="h-1/2 w-full flex aspect-square relative">
             <Image
               src={USDCLogo}
               fill

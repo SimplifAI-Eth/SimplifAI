@@ -23,7 +23,7 @@ const MobileAIConfig = ({ config }: { config: MobileAIConfigParams }) => {
         <div className="flex w-full h-[30%]">
           {/* Token Swap thing */}
           <div className="flex gap-2 w-full h-full p-4 items-center justify-center">
-            <div className="h-full w-fit flex aspect-square relative">
+            <div className="h-1/3 w-full flex aspect-square relative">
               <Image
                 src={ETHLogo}
                 fill
@@ -32,10 +32,10 @@ const MobileAIConfig = ({ config }: { config: MobileAIConfigParams }) => {
                 className=""
                 />
             </div>
-              <div className="h-full w-fit flex aspect-square relative items-center justify-center text-white text-4xl">
+              <div className="h-1/2 w-full flex aspect-square relative items-center justify-center text-white text-4xl">
               <FaArrowRightArrowLeft />
               </div>
-            <div className="h-full w-fit flex aspect-square relative">
+            <div className="h-1/3 w-full flex aspect-square relative">
             <Image
               src={USDCLogo}
               fill
