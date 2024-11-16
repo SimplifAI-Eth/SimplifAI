@@ -59,9 +59,9 @@ export default function Home() {
 
     // Search for all tokens held by the user
     if(!getAIWallet) {
-      // tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
+      tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
       console.log("Fetching Portfolio for: ", account.address);
-      const tokenDetails = await getTokenDetails(account.address, chainId);
+      // const tokenDetails = await getTokenDetails(account.address, chainId);
     } else {
       console.log("Fetching Portfolio for AI wallet: ", AIWallet);
       tokenDetails = await getTokenDetails(AIWallet, CHAIN_ID);
