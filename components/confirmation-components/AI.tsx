@@ -54,7 +54,7 @@ const AI = ({ tradeMin, tradeMax, orderType, quantity, transactionCount, lastTim
           >
             <div className="flex w-full justify-between items-center mb-3">
               <h1 className="text-white">Token QTY :</h1>
-              <h1 className="">{quantity} ETH</h1>
+              <h1 className="">{quantity? `${quantity} ETH` : "Not Defined"}</h1>
             </div>
 
             <div className="flex w-full justify-between items-center mb-3">
@@ -62,14 +62,14 @@ const AI = ({ tradeMin, tradeMax, orderType, quantity, transactionCount, lastTim
               <h1 className="">{transactionCount}</h1>
             </div>
 
-            <div className="flex w-full justify-between items-center">
+            {/*<div className="flex w-full justify-between items-center">
               <h1 className="text-white">Last Transaction :</h1>
               <h1 className="">{lastTimeStampSinceTransaction.toLocaleString("en-US", {
                 hour: "numeric",
                 minute: "numeric",
                 hour12: true,
               })}</h1>
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>

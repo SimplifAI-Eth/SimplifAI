@@ -52,54 +52,54 @@ export default function Home() {
     { time: 1731740400, value: 3119.640831632943 },
   ];
 
-  const [orders, setOrders] = useState<any>();
+  // const [orders, setOrders] = useState<any>();
 
-  const handleClick = () => {
-    const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/getBalance`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
-          }),
-        }
-      );
+  // const handleClick = () => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/getBalance`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
+  //         }),
+  //       }
+  //     );
 
-      const data = await response.json();
-      setOrders(data);
-    };
+  //     const data = await response.json();
+  //     setOrders(data);
+  //   };
 
-    fetchData();
-  };
+  //   fetchData();
+  // };
 
-  const handleClick2 = () => {
-    const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/cashout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
-            amount: 0.00001,
-            tokenSymbol: "ETH-SEPOLIA",
-          }),
-        }
-      );
-    };
+  // const handleClick2 = () => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/circle/cashout`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           userID: "0x2bfe8392ed138f5EA738046016905Eebf16fC0ee",
+  //           amount: 0.00001,
+  //           tokenSymbol: "ETH-SEPOLIA",
+  //         }),
+  //       }
+  //     );
+  //   };
 
-    fetchData();
-  };
+  //   fetchData();
+  // };
 
-  useEffect(() => {
-    console.log("gotten data in testing page:", orders.data.balances[0].amount);
-  }, [orders]);
+  // useEffect(() => {
+  //   console.log("gotten data in testing page:", orders.data.balances[0].amount);
+  // }, [orders]);
 
   return (
     <>
@@ -109,9 +109,9 @@ export default function Home() {
             <ToggleNotification connectedWallet={walletAddress} />
             <MessageButton connectedWallet={walletAddress} />
             <RetriveNotificationButton connectedWallet={walletAddress} />
-            <AddOrderTest />
+            {/* <AddOrderTest />
             <button onClick={handleClick}>get balance</button>
-            <button onClick={handleClick2}>cashout</button>
+            <button onClick={handleClick2}>cashout</button> */}
           </div>
         )}
         {/* <Component chartData={mockTokenData} /> */}
