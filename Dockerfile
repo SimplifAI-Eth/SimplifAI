@@ -30,7 +30,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=build /app/next.config.mjs ./
+COPY --from=build /app/next.config.ts ./
 COPY --from=build /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size
