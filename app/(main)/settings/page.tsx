@@ -32,6 +32,7 @@ const Settings = () => {
     for (const order of orderBook) {
       if (order.tradeMin <= price && order.tradeMax >= price) {
         // init swap here
+        console.log("Initiated")
         await reduceTransactionCount({userID: walletAddress, orderID: order.orderID})
       }
     }
@@ -64,6 +65,7 @@ const Settings = () => {
       const { price, signal, timestamp } = data;
       console.log("gotten data:", data);
       setAISignal(data);
+      swapLogic(walletAddress, price)
     };
 
     fetchData();
