@@ -71,10 +71,10 @@ export default function Home() {
     api.open({
       message: isWaiting ? "Initializing Transaction" : "Transaction Confirmed",
       description: isWaiting
-        ? `Please wait a few moments. Click to view your transaction: https://polygonscan.com/tx/${hash}`
-        : `Your transaction has been confirmed. Click to view your transaction: https://polygonscan.com/tx/${hash}`,
+        ? `Please wait a few moments. Click to view your transaction: https://polygon.blockscout.com/tx/${hash}`
+        : `Your transaction has been confirmed. Click to view your transaction: https://polygon.blockscout.com/tx/${hash}`,
       onClick: () => {
-        window.location.href = `https://polygonscan.com/tx/${hash}`;
+        window.location.href = `https://polygon.blockscout.com/tx/${hash}`;
       },
       duration: 10,
     });
@@ -122,9 +122,11 @@ export default function Home() {
 
   useEffect(() => {
     if (isPending == false) {
-      `You have successfully transfered ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverWalletAddress}(${txData.receiverName})`
+      handleMessageSend(account.address as string,`You have successfully transfered ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverWalletAddress}(${txData.receiverName})`);
       setIsExecuting(false);
       setIsOpen(false);
+    }else{
+      openNotification(true, hash as any);
     }
   }, [isPending]);
   useEffect(() => {

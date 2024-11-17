@@ -20,20 +20,20 @@ export default function Home() {
   const [connected, setConnected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  async function callCircle(){
-    //token, amount, chainId, walletAddress, decimals
-    const approval = await getApproval("0x3c499c542cef5e3811e1192ce70d8cc03d5c3359", 100, 137, "0xabb14526c04c9b7404cefe00ad48b8a3832edfc5", 6);
-    console.log(approval);
+  // async function callCircle(){
+  //   //token, amount, chainId, walletAddress, decimals
+  //   const approval = await getApproval("0x3c499c542cef5e3811e1192ce70d8cc03d5c3359", 100, 137, "0xabb14526c04c9b7404cefe00ad48b8a3832edfc5", 6);
+  //   console.log(approval);
 
-    const res = await fetch('/api/circle/sign', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({walletId: "a99ce10a-8127-5754-b865-c3c24f32a439", tx: approval})
-    })
-  }
-  useEffect(()=>{callCircle()},[])
+  //   const res = await fetch('/api/circle/sign', {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({walletId: "a99ce10a-8127-5754-b865-c3c24f32a439", tx: approval})
+  //   })
+  // }
+  // useEffect(()=>{callCircle()},[])
 
   // useEffect(() => {
   //   if (primaryWallet && !walletAddress) {
