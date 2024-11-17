@@ -4,6 +4,7 @@ import { connectToDatabase } from "../database";
 import { handleError } from "../utils";
 import Users from "../database/models/user.model";
 import { addOrdertoOrderBookParams } from "@/types";
+import { string } from "zod";
 
 export const getUserByUserID = async (userID: string) => {
   try {
@@ -89,6 +90,49 @@ export const addOrdertoOrderBook = async ({
 
     if (updatedUser) {
       console.log("Order added added");
+      return JSON.parse(JSON.stringify(updatedUser));
+    }
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const reduceTransactionCount = async ({
+  userID,
+  orderID,
+}: {
+  userID: string;
+  orderID: string;
+}) => {
+  try {
+    await connectToDatabase();
+
+    const user = await getUserByUserID(userID);
+
+    const orderIndex = user.orderBook.findIndex(
+      (order: any) => order._id === orderID
+    );
+
+    if (orderIndex === -1) {
+      throw new Error("Order not found");
+    }
+
+    const updatedOrder = user.orderBook[orderIndex];
+    updatedOrder.transactionCount -= 1;
+    updatedOrder.lastTimeStampSinceTransaction = new Date()
+
+    const updatedUser = await Users.findByIdAndUpdate(
+      user._id,
+      {
+        $set: { orderBook: user.orderBook },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (updatedUser) {
+      console.log("Transaction count reduced");
       return JSON.parse(JSON.stringify(updatedUser));
     }
   } catch (error) {

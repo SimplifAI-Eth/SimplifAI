@@ -9,11 +9,12 @@ import { tokenList } from "@/utils/tokenList";
 
 type PortfolioCardProps = {
   portfolio: TokenInformation;
+  setTokenAddress: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const PortfolioCard = ({ portfolio }: PortfolioCardProps) => {
+const PortfolioCard = ({ portfolio, setTokenAddress }: PortfolioCardProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const chainId = useChainId();
   const result = useReadContract({
@@ -58,10 +59,14 @@ const PortfolioCard = ({ portfolio }: PortfolioCardProps) => {
     searchPortfolio();
   }, [result.isLoading]);
 
+  const handleGetChart = () => {
+    setTokenAddress(portfolio.contract_address);
+  }
+
   return loading ? (
     <div></div>
   ) : (
-    <div className="w-[90%] text-xs sm:text-md md:text-base md:w-1/4 card-gradient rounded-xl px-4 py-3 flex justify-between items-center drop-shadow-xl font-semibold">
+    <div className="w-[90%] text-xs sm:text-md md:text-base md:w-1/3 card-gradient rounded-xl px-4 py-3 flex justify-between items-center drop-shadow-xl font-semibold hover:cursor-pointer" onClick={handleGetChart}>
       <div className="w-[70%] h-full flex items-center gap-4 py-2">
         <div className="w-1/4 bg-transparent rounded-full aspect-square relative">
           <Image

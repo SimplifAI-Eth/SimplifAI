@@ -55,7 +55,7 @@ export function Component({ chartData }: { chartData: { time: number; value: num
               content={<ChartTooltipContent hideLabel />}
               formatter={(value, name, props) => {
               const { payload } = props;
-              return [`${Math.round(Number(value) * 10000) / 10000}`, ` Time: ${payload.time}`];
+              return [`$${Math.round(Number(value) * 10000) / 10000}`, ` Time: ${payload.time}`];
               }}
             />
             <Line

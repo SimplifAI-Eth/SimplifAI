@@ -42,19 +42,24 @@ const AI = ({ tradeMin, tradeMax, orderType, quantity, transactionCount, lastTim
 
         {/* Details */}
         <div className="flex flex-col w-full h-full justify-center items-center m-3">
-          <h1 className="text-[40px] text-white pt-5">{orderType == "BUY" ? "Buy ETH" : "Sell ETH"}</h1>
           <div>
-              <h1 className="text-2xl font-light h6 tracking-wider pb-8">
+              <h1 className="text-2xl font-light h6 tracking-wider pt-5">
+                  Configure AI
+              </h1>
+          </div>
+          <h1 className="text-[40px] text-white">{orderType == "BUY" ? "Buy ETH" : "Sell ETH"}</h1>
+          <div>
+              <h1 className="text-2xl font-light h6 tracking-wider pt-4 pb-8">
                   {tradeMin} - {tradeMax} USDC
               </h1>
           </div>
           
-          <div
+          {/*<div
             className="w-full flex flex-col p-2 text-lg "
           >
             <div className="flex w-full justify-between items-center mb-3">
               <h1 className="text-white">Token QTY :</h1>
-              <h1 className="">{quantity} ETH</h1>
+              <h1 className="">{quantity? `${quantity} ETH` : "Not Defined"}</h1>
             </div>
 
             <div className="flex w-full justify-between items-center mb-3">
@@ -70,7 +75,7 @@ const AI = ({ tradeMin, tradeMax, orderType, quantity, transactionCount, lastTim
                 hour12: true,
               })}</h1>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </>

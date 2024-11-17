@@ -6,6 +6,9 @@ import { CgSpinner } from "react-icons/cg";
 import { useAccount, useChainId, useReadContract } from "wagmi";
 import { config } from "@/utils/config";
 import PortfolioCard from "@/components/PortfolioCard";
+import LineChartPopUp from "@/components/LineChartPopUp";
+import { getUserByUserID } from "@/lib/db_actions/user-actions";
+import Button from "@/components/landing-components/Button";
 
 const CHAIN_ID = 137;
 const WALLET_ADDRESS = "0x67BDB62C0FF92187490DD34ed1BCEEdD3e47d517";
@@ -35,18 +38,39 @@ export default function Home() {
   const [userProfit, setuserProfit] = useState<number>(0);
   const [userROI, setUserROI] = useState<number>(0);
   const [portfolioFetched, setPortfolioFetched] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [tokenAddress, setTokenAddress] = useState<string>("");
   const account = useAccount({ config });
   const chainId = useChainId();
+  const [user, setUser] = useState<any>({});
+  const [AIWallet, setAIWallet] = useState<string>("");
+  const [getAIWallet, setGetAIWallet] = useState<boolean>(false);
 
-  const fetchPortfolio = async () => {
+  const fetchPortfolio = async (getAIWallet: boolean) => {
     if (!account.address) {
       return;
     }
+    const foundUser = await getUserByUserID(account.address);
+    // const foundUser = await getUserByUserID(WALLET_ADDRESS);
+    setUser(foundUser);
+    setAIWallet(foundUser.circleWalletAddress);
+
+    let tokenDetails;
+
     // Search for all tokens held by the user
-    const tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
-    // const tokenDetails = await getTokenDetails(account.address, chainId);
-    console.log(tokenDetails);
+    if(!getAIWallet) {
+      tokenDetails = await getTokenDetails(WALLET_ADDRESS, CHAIN_ID); // mock data using mario's wallet and ethereum main net
+      console.log("Fetching Portfolio for: ", account.address);
+      // const tokenDetails = await getTokenDetails(account.address, chainId);
+    } else {
+      console.log("Fetching Portfolio for AI wallet: ", AIWallet);
+      tokenDetails = await getTokenDetails(AIWallet, CHAIN_ID);
+    }
+    console.log("Token details: ", tokenDetails);
+
     if (!tokenDetails) {
+      setLoading(false);
+      setFinished(true);
       return;
     }
     const tokenResult = tokenDetails.result;
@@ -106,11 +130,11 @@ export default function Home() {
 
   useEffect(() => {
     if (account.address) {
-      fetchPortfolio();
+      fetchPortfolio(getAIWallet);
       setPortfolioFetched(true);
       console.log("fetched portfolio of", account.address);
     }
-  }, [account.address]);
+  }, [account.address, getAIWallet]);
 
   useEffect(() => {
     if (account.address && portfolioFetched) {
@@ -119,6 +143,25 @@ export default function Home() {
       setFinished(true);
     }
   }, [portfolio, loading]);
+
+  useEffect(() => {
+    console.log("Token Address", tokenAddress);
+    if (tokenAddress === "") {
+      return;
+    }
+    setIsOpen(true);
+  }, [tokenAddress]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTokenAddress("");
+    }
+  }, [isOpen]);
+
+  const handleSwitch = () => {
+    setGetAIWallet((getAIWallet) => !getAIWallet);
+    console.log("Switching to other Wallet details")
+  }
 
   return (
     <>
@@ -159,20 +202,22 @@ export default function Home() {
                 {userROI || "+ 0"}%
               </p>
             </div>
+            <Button onClick={handleSwitch}>{getAIWallet ? "Switch to Private Wallet" : "Switch to AI Wallet"}</Button>
           </div>
         )}
 
         {/* Mock ethereum portfolio */}
         {portfolio.length == 0 && !loading && finished && (
-          <PortfolioCard portfolio={mockEthData}/>
+          <PortfolioCard portfolio={mockEthData} setTokenAddress={setTokenAddress} />
         )}
 
         {/* Actual portfolio */}
         {!loading &&
           finished &&
           portfolio.map((portofolio, index) => (
-            <PortfolioCard key={index} portfolio={portofolio} />
+            <PortfolioCard key={index} portfolio={portofolio} setTokenAddress={setTokenAddress} />
           ))}
+        <LineChartPopUp isOpen={isOpen} setIsOpen={setIsOpen} tokenAddress={tokenAddress} />
       </div>
     </>
   );
