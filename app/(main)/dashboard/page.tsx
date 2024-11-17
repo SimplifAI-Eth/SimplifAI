@@ -182,7 +182,7 @@ export default function Home() {
         // console.log("Accepted action");
         const args = processedArguments;
         executeTx(args);
-        setAcceptAction(false);
+        //setAcceptAction(false);
       }
     }, [acceptAction]);
 
