@@ -431,7 +431,7 @@ export default function Home() {
 
     return (
       <>
-        {isLoggedIn ? (
+        {true ? (
           <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
             {hash && <div>Transaction Hash: {hash}</div>}
             {isConfirming && <div>Waiting for confirmation...</div>}
