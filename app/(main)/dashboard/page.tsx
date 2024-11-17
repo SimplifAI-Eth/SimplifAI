@@ -57,6 +57,7 @@ async function swapLogic(walletAddress: string, price: string, signal: string) {
 }
 
 const handleMessageSend = async (receiverAddress: string, message: string) => {
+  console.log("Currently awaiting push notification")
   await sendMessage({
     receiverAdr: receiverAddress,
     message: message,
@@ -129,6 +130,8 @@ export default function Home() {
         openNotification(true, hash as any);
       }if(txData){
         handleMessageSend(account.address as string,`You have successfully transfered ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverWalletAddress}(${txData.receiverName})`);
+      } else {
+        console.log("notif did not send")
       }
     }
   }, [isPending]);
@@ -141,6 +144,7 @@ export default function Home() {
         if(txData){
           console.log("Initiating Push Notification")
           handleMessageSend(account.address as string, `You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol}.`);
+          console.log(`You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol}`)
         }else{
           console.log("Push Notification Failed")
         }

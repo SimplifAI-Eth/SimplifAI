@@ -17,6 +17,8 @@ const mockConfig = {
   lastTimeStampSinceTransaction: new Date(),
 };
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const Settings = () => {
   const { primaryWallet } = useDynamicContext();
   const [walletAddress, setWalletAddress] = useState("");
@@ -32,7 +34,6 @@ const Settings = () => {
     for (const order of orderBook) {
       if (order.tradeMin <= price && order.tradeMax >= price) {
         // init swap here
-        console.log("Initiated")
         await reduceTransactionCount({userID: walletAddress, orderID: order.orderID})
       }
     }
@@ -65,7 +66,7 @@ const Settings = () => {
       const { price, signal, timestamp } = data;
       console.log("gotten data:", data);
       setAISignal(data);
-      swapLogic(walletAddress, price)
+      await delay(100000)
     };
 
     fetchData();
