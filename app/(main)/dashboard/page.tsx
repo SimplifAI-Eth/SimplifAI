@@ -77,68 +77,81 @@ export default function Home() {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
-    async function swapLogic(walletAddress: string, price: string, signal: string) {
-      const user = await getUserByUserID(walletAddress);
-      const orderBook = user.orderBook;
-  
-      for (const order of orderBook) {
-        if (order.tradeMin <= price && order.tradeMax >= price && order.transactionCount > 0) {
-          if(signal == order.orderType || (signal == "HOLD" && order.orderType == "BUY")) {
+  async function swapLogic(
+    walletAddress: string,
+    price: string,
+    signal: string
+  ) {
+    const user = await getUserByUserID(walletAddress);
+    const orderBook = user.orderBook;
+
+    for (const order of orderBook) {
+      if (
+        order.tradeMin <= price &&
+        order.tradeMax >= price &&
+        order.transactionCount > 0
+      ) {
+        if (
+          signal == order.orderType ||
+          (signal == "HOLD" && order.orderType == "BUY")
+        ) {
           // init swap here
           await reduceTransactionCount({
             userID: walletAddress,
             orderID: order.orderID,
           });
-          }
         }
       }
-
-  const {
-    data: swapHash,
-    error: swapError,
-    isPending: swapIsPending,
-    sendTransaction,
-  } = useSendTransaction();
-  const { isLoading: isSwapConfirming, isSuccess: isSwapConfirmed } =
-    useWaitForTransactionReceipt({ hash: swapHash });
-
-  // Update Status once transaction confirmed
-  useEffect(() => {
-    if (isPending == false) {
-      sendMessage({
-        receiverAdr: account.address as string,
-        message: `You have successfully swapped ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverName}.`,
-      });
-      setIsExecuting(false);
-      setIsOpen(false);
     }
-  }, [isPending]);
-  useEffect(() => {
-    console.log("Tx Status Changed");
-    if (swapIsPending == false) {
-      if (isApproving) {
-        setIsApproved(true);
-        setIsApproving(false);
-        setIsExecuting(false);
-      }
-      if (isSwapping) {
-        setIsApproved(false);
-        setIsSwapping(false);
-        setIsExecuting(false);
+
+    const {
+      data: swapHash,
+      error: swapError,
+      isPending: swapIsPending,
+      sendTransaction,
+    } = useSendTransaction();
+    const { isLoading: isSwapConfirming, isSuccess: isSwapConfirmed } =
+      useWaitForTransactionReceipt({ hash: swapHash });
+
+    // Update Status once transaction confirmed
+    useEffect(() => {
+      if (isPending == false) {
         sendMessage({
           receiverAdr: account.address as string,
-          message: `You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol} token.`,
+          message: `You have successfully swapped ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverName}.`,
         });
+        setIsExecuting(false);
         setIsOpen(false);
       }
-    }
-  }, [isPending, swapIsPending]);
-  useEffect(() => {
-    if (isPending == false) {
-      setIsExecuting(false);
-      setIsOpen(false);
-    }
-  }, [isPending]);
+    }, [isPending]);
+
+    useEffect(() => {
+      console.log("Tx Status Changed");
+      if (swapIsPending == false) {
+        if (isApproving) {
+          setIsApproved(true);
+          setIsApproving(false);
+          setIsExecuting(false);
+        }
+        if (isSwapping) {
+          setIsApproved(false);
+          setIsSwapping(false);
+          setIsExecuting(false);
+          sendMessage({
+            receiverAdr: account.address as string,
+            message: `You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol} token.`,
+          });
+          setIsOpen(false);
+        }
+      }
+    }, [isPending, swapIsPending]);
+
+    useEffect(() => {
+      if (isPending == false) {
+        setIsExecuting(false);
+        setIsOpen(false);
+      }
+    }, [isPending]);
 
     useEffect(() => {
       if (Object.keys(parsedResponse).length > 0) {
@@ -146,20 +159,10 @@ export default function Home() {
       }
     }, [parsedResponse]);
 
-<<<<<<< HEAD
-  async function openConfirmation(parsedResponse: any) {
-    console.log("Processing Confirmation");
-    openNotification(true, "hash value");
-    const hasToolCall = "tool_calls" in parsedResponse;
-    if (!hasToolCall) {
-      initializeError("Invalid Prompt");
-      return;
-=======
     async function initializeError(message: string) {
       // console.log("Opening Error Pop Up");
       setErrorMessage(message);
       setIsErrorOpen(true);
->>>>>>> origin/main
     }
 
     async function openConfirmation(parsedResponse: any) {
@@ -181,10 +184,8 @@ export default function Home() {
       setUser(user);
       console.log("User Found");
       console.log(user);
-
       const args = processArguments(parsedResponse.tool_calls[0]);
       setProcessedArguments(args);
-
       try {
         // Check is Function Processing
         if (args.function === "transfer_tokens") {
@@ -221,11 +222,6 @@ export default function Home() {
         initializeError("Invalid Prompt");
         return;
       }
-      // Search User Address in the database
-      user.contacts.forEach((item: any) => {
-        // console.log(item);
-        // console.log(item.name);
-      });
       const transferedUser = user.contacts.find(
         (item: any) => item.name.toLowerCase() === transferTo.toLowerCase()
       );
@@ -238,7 +234,7 @@ export default function Home() {
         receiverWalletAddress: transferedUser.walletAddress,
         transferAmount: specifiedAmount,
       } as any;
-      // Search Information of the Transfered Token
+      //     // Search Information of the Transfered Token
       if (specifiedToken === USDC.symbol) {
         txData.transferToken = USDC;
       } else if (specifiedToken === "ETH") {
@@ -247,7 +243,7 @@ export default function Home() {
         initializeError("Token Not Found");
         return;
       }
-      // Open Confirmation
+      //     // Open Confirmation
       setTxData(txData);
       setIsOpen(true);
     }
@@ -263,7 +259,6 @@ export default function Home() {
       const txData = {
         amount: specifiedAmount,
       } as any;
-
       // Search Information of Token1 and Token2
       // Specified Token with the amount
       if (specifiedToken === USDC.symbol) {
@@ -316,12 +311,10 @@ export default function Home() {
         initializeError("Token Not Specified");
         return;
       }
-
       const txData = {
         transactionCount: 3,
         lastTimeStampSinceTransaction: null,
       } as any;
-
       if (buyMin || buyMax) {
         txData.tradeMin = buyMin;
         txData.tradeMax = buyMax;
@@ -377,7 +370,6 @@ export default function Home() {
             txData.transferAmount * Math.pow(10, txData.transferToken.decimals)
           );
           // console.log("Transfered Amount:", parsedAmount);
-
           writeContract({
             address: txData.transferToken.address,
             abi: ERC20ABI,
@@ -439,23 +431,9 @@ export default function Home() {
       }
     }
 
-<<<<<<< HEAD
-  return (
-    <>
-      {contextHolder}
-      {isLoggedIn ? (
-        <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
-          {hash && <div>Transaction Hash: {hash}</div>}
-          {isConfirming && <div>Waiting for confirmation...</div>}
-          {isConfirmed && <div>Transaction confirmed.</div>}
-          {error && (
-            <div>
-              Error: {(error as BaseError).shortMessage || error.message}
-            </div>
-          )}
-=======
     return (
       <>
+        {contextHolder}
         {isLoggedIn ? (
           <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
             {hash && <div>Transaction Hash: {hash}</div>}
@@ -466,7 +444,6 @@ export default function Home() {
                 Error: {(error as BaseError).shortMessage || error.message}
               </div>
             )}
->>>>>>> origin/main
 
             {swapHash && <div>Transaction Hash: {swapHash}</div>}
             {isSwapConfirming && <div>Waiting for confirmation...</div>}
@@ -483,11 +460,11 @@ export default function Home() {
               <div className="hidden w-full h-full md:flex justify-center items-center">
                 <DesktopRecordButton setParsedResponse={setParsedResponse} />
               </div>
-              {/*<div>
-              {Object.keys(processedArguments).length > 0 && (
-                <p>{JSON.stringify(processedArguments, null, 2)}</p>
-              )}
-            </div>*/}
+              <div>
+                {Object.keys(processedArguments).length > 0 && (
+                  <p>{JSON.stringify(processedArguments, null, 2)}</p>
+                )}
+              </div>
 
               <ActionErrorPopUp
                 message={errorMessage}
@@ -505,18 +482,6 @@ export default function Home() {
               />
             </div>
           </div>
-<<<<<<< HEAD
-        </div>
-      ) : (
-        <div className="flex text-xl mt-24 font-semibold justify-center text-center w-full items-center">
-          <p className="w-2/3">
-            Please connect your wallet to use our features.
-          </p>
-        </div>
-      )}
-    </>
-  );
-=======
         ) : (
           <div className="flex text-xl mt-24 font-semibold justify-center text-center w-full items-center">
             <p className="w-2/3">
@@ -527,5 +492,4 @@ export default function Home() {
       </>
     );
   }
->>>>>>> 1fe978e957ef8c18bbe0db104d7db30d4575c022
 }
