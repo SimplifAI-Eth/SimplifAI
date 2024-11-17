@@ -1,8 +1,5 @@
 import { TappdClient } from "@phala/dstack-sdk";
-<<<<<<< HEAD
-=======
 // import "dotenv/config";
->>>>>>> origin/main
 import { privateKeyToAccount } from "viem/accounts";
 import { keccak256 } from "viem";
 const endpoint = "http://localhost:8090";
