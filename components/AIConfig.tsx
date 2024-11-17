@@ -55,12 +55,12 @@ const AIConfig = ({ config }: { config: AIConfigParams }) => {
         {/* <p className="text-3xl text-white">{config.orderType == "BUY" ? "Buy" : "Sell"} ETH</p> */}
         <div className="grid grid-cols-2 gap-2 px-3">
           <p className="text-xl">Range :</p>
-          <p className="text-xl flex justify-end">
+          <p className="text-xl flex justify-end gap-2">
             {" "}
             <span className="text-white">
-              {config.tradeMin} - {config.tradeMax}
+              {`${config.tradeMin} - ${config.tradeMax} ${' '}`}
             </span>
-            USDC
+             {` USDC`}
           </p>
           <p className="text-xl text-white">Token Quantity:</p>
           <p className="text-xl flex justify-end">{config.quantity} ETH</p>
