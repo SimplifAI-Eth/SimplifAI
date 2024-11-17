@@ -121,7 +121,7 @@ export default function Home() {
 
   useEffect(() => {
     if (Object.keys(parsedResponse).length > 0) {
-      setIsOpen(true);
+      openConfirmation(parsedResponse);
     }
   }, [parsedResponse]);
 
@@ -401,9 +401,10 @@ export default function Home() {
 
   useEffect(() => {
     if (acceptAction) {
-      console.log("Accepted action");
-      const MARIOHEREISTHEJSONOBJ = processedArguments;
-      // Mario you can take it from here
+      // console.log("Accepted action");
+      const args = processedArguments;
+      executeTx(args);
+      //setAcceptAction(false);
     }
   }, [acceptAction]);
 
