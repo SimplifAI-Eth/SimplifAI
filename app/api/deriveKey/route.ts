@@ -1,9 +1,11 @@
 import { TappdClient } from "@phala/dstack-sdk";
+<<<<<<< HEAD
+=======
 // import "dotenv/config";
+>>>>>>> origin/main
 import { privateKeyToAccount } from "viem/accounts";
 import { keccak256 } from "viem";
-const endpoint =
-  process.env.DSTACK_SIMULATOR_ENDPOINT || "http://localhost:8090";
+const endpoint = "http://localhost:8090";
 export const dynamic = "force-dynamic";
 export async function GET() {
   console.log(endpoint);

@@ -30,7 +30,24 @@ import {
 } from "@/lib/db_actions/user-actions";
 import sendMessage from "@/utils/sendMes";
 
+import { notification } from "antd";
+
 export default function Home() {
+  // for notifications
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (isWaiting: boolean, hash: string) => {
+    api.open({
+      message: isWaiting ? "Initializing Transaction" : "Transaction Confirmed",
+      description: isWaiting
+        ? `Please wait a few moments. Click to view your transaction: https://polygonscan.com/tx/${hash}`
+        : `Your transaction has been confirmed. Click to view your transaction: https://polygonscan.com/tx/${hash}`,
+      onClick: () => {
+        window.location.href = `https://polygonscan.com/tx/${hash}`;
+      },
+      duration: 10,
+    });
+  };
+
   const { primaryWallet } = useDynamicContext();
   const isLoggedIn = useIsLoggedIn();
   const [parsedResponse, setParsedResponse] = useState<any>({});
@@ -129,10 +146,20 @@ export default function Home() {
       }
     }, [parsedResponse]);
 
+<<<<<<< HEAD
+  async function openConfirmation(parsedResponse: any) {
+    console.log("Processing Confirmation");
+    openNotification(true, "hash value");
+    const hasToolCall = "tool_calls" in parsedResponse;
+    if (!hasToolCall) {
+      initializeError("Invalid Prompt");
+      return;
+=======
     async function initializeError(message: string) {
       // console.log("Opening Error Pop Up");
       setErrorMessage(message);
       setIsErrorOpen(true);
+>>>>>>> origin/main
     }
 
     async function openConfirmation(parsedResponse: any) {
@@ -412,6 +439,21 @@ export default function Home() {
       }
     }
 
+<<<<<<< HEAD
+  return (
+    <>
+      {contextHolder}
+      {isLoggedIn ? (
+        <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
+          {hash && <div>Transaction Hash: {hash}</div>}
+          {isConfirming && <div>Waiting for confirmation...</div>}
+          {isConfirmed && <div>Transaction confirmed.</div>}
+          {error && (
+            <div>
+              Error: {(error as BaseError).shortMessage || error.message}
+            </div>
+          )}
+=======
     return (
       <>
         {isLoggedIn ? (
@@ -424,6 +466,7 @@ export default function Home() {
                 Error: {(error as BaseError).shortMessage || error.message}
               </div>
             )}
+>>>>>>> origin/main
 
             {swapHash && <div>Transaction Hash: {swapHash}</div>}
             {isSwapConfirming && <div>Waiting for confirmation...</div>}
