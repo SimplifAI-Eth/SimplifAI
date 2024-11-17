@@ -252,7 +252,7 @@ export default function Home() {
 
   async function checkAISetting(args: any) {
     // Check Arguments
-    const {
+    let {
       tokenToBuy,
       tokenToSell,
       specifiedAmmount,
@@ -275,6 +275,7 @@ export default function Home() {
       transactionCount: 3,
       lastTimeStampSinceTransaction: null,
     } as any;
+    if(!specifiedAmmount){specifiedAmmount = 0.01}
 
     if (buyMin || buyMax) {
       txData.tradeMin = buyMin;

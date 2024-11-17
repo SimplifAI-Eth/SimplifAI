@@ -51,7 +51,7 @@ const MobileAIConfig = ({ config }: { config: MobileAIConfigParams }) => {
         <div className="w-full h-fit flex-col p-2 px-5 gap-2 flex">
           <p className="text-md text-white">{config.orderType == "BUY" ? "Buy" : "Sell"} ETH</p>
           <p className="text-md text-white">Range: {config.tradeMin} - {config.tradeMax} USDC</p>
-          <p className="text-md text-white">Token Quantity: {config.quantity} ETH</p>
+          <p className="text-md text-white">Token Quantity: {config.quantity? config.quantity : 0.1} ETH</p>
           <p className="text-md text-white">Order Completion:</p>
           <BarPercentage barPercentage={Math.abs(config.transactionCount - 3) * 100 / 3} option="" />
         </div>

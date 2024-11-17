@@ -61,7 +61,7 @@ const AIConfig = ({ config }: { config: AIConfigParams }) => {
             USDC
           </p>
           <p className="text-xl text-white">Token Quantity:</p>
-          <p className="text-xl flex justify-end">{config.quantity} ETH</p>
+          <p className="text-xl flex justify-end">{config.quantity? config.quantity : 0.01} ETH</p>
         </div>
         <p className="text-xl mt-2 pl-3 mb-2 text-white">Order Completion:</p>
         <BarPercentage
