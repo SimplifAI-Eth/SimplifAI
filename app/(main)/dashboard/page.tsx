@@ -146,20 +146,10 @@ export default function Home() {
       }
     }, [parsedResponse]);
 
-<<<<<<< HEAD
-  async function openConfirmation(parsedResponse: any) {
-    console.log("Processing Confirmation");
-    openNotification(true, "hash value");
-    const hasToolCall = "tool_calls" in parsedResponse;
-    if (!hasToolCall) {
-      initializeError("Invalid Prompt");
-      return;
-=======
     async function initializeError(message: string) {
       // console.log("Opening Error Pop Up");
       setErrorMessage(message);
       setIsErrorOpen(true);
->>>>>>> origin/main
     }
 
     async function openConfirmation(parsedResponse: any) {
