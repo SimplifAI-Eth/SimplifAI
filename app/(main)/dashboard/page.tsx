@@ -68,6 +68,7 @@ export default function Home() {
   // for notifications
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (isWaiting: boolean, hash: string) => {
+    console.log("Creating Notification");
     api.open({
       message: isWaiting ? "Initializing Transaction" : "Transaction Confirmed",
       description: isWaiting
@@ -122,23 +123,30 @@ export default function Home() {
 
   useEffect(() => {
     if (isPending == false) {
-      handleMessageSend(account.address as string,`You have successfully transfered ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverWalletAddress}(${txData.receiverName})`);
       setIsExecuting(false);
       setIsOpen(false);
-    }else{
-      openNotification(true, hash as any);
+      if(hash){
+        openNotification(true, hash as any);
+      }if(txData){
+        handleMessageSend(account.address as string,`You have successfully transfered ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverWalletAddress}(${txData.receiverName})`);
+      }
     }
   }, [isPending]);
   useEffect(() => {
     console.log("Tx Status Changed");
     if (swapIsPending == false) {
-      if (isApproving) {setIsApproved(true);setIsApproving(false);setIsExecuting(false);}
-      if (isSwapping) {setIsApproved(false);setIsSwapping(false);setIsExecuting(false);
-        handleMessageSend(account.address as string, `You have successfully swapped ${txData.transferAmount} ${txData.transferToken.symbol} to ${txData.receiverName}.`);
-        setIsOpen(false);
+      if (isApproving) {setIsApproved(true);setIsApproving(false);setIsExecuting(false);openNotification(true, swapHash as any);}
+      if (isSwapping) {
+        setIsApproved(false);setIsSwapping(false);setIsExecuting(false);setIsOpen(false);openNotification(true, swapHash as any);
+        if(txData){
+          console.log("Initiating Push Notification")
+          handleMessageSend(account.address as string, `You have successfully swapped ${txData.amount} ${txData.tokenToSell.symbol} to ${txData.tokenToBuy.symbol}.`);
+        }else{
+          console.log("Push Notification Failed")
+        }
       }
     }
-  }, [isPending, swapIsPending]);
+  }, [swapIsPending]);
 
   useEffect(() => {
     if (primaryWallet) {
@@ -308,6 +316,7 @@ export default function Home() {
   }
 
   async function openConfirmation(parsedResponse: any) {
+    setIsExecuting(false);
     console.log("Processing Confirmation");
     const hasToolCall = "tool_calls" in parsedResponse;
     if (!hasToolCall) {
@@ -380,7 +389,7 @@ export default function Home() {
         }
         // console.log(txData);
         if (isApproved) {
-          // console.log("Performing the actual swap");
+          console.log("Performing the actual swap");
           const parsedAmount = BigInt(
             txData.amount * Math.pow(10, txData.tokenToSell.decimals)
           );
@@ -398,7 +407,7 @@ export default function Home() {
           setIsSwapping(true);
           sendTransaction(swapTx.tx);
         } else {
-          // console.log("Requesting for Approval");
+          console.log("Requesting for Approval");
           const approvalTx = await getApproval(
             txData.tokenToSell.address,
             txData.amount,
@@ -432,7 +441,7 @@ export default function Home() {
       // console.log("Accepted action");
       const args = processedArguments;
       executeTx(args);
-      //setAcceptAction(false);
+      setAcceptAction(false);
     }
   }, [acceptAction]);
 
@@ -442,25 +451,9 @@ export default function Home() {
 
   return (
     <>
+      {contextHolder}
       {connected ? (
         <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
-          {hash && <div>Transaction Hash: {hash}</div>}
-          {isConfirming && <div>Waiting for confirmation...</div>}
-          {isConfirmed && <div>Transaction confirmed.</div>}
-          {error && (
-            <div>
-              Error: {(error as BaseError).shortMessage || error.message}
-            </div>
-          )}
-
-          {swapHash && <div>Transaction Hash: {swapHash}</div>}
-          {isSwapConfirming && <div>Waiting for confirmation...</div>}
-          {isSwapConfirmed && <div>Transaction confirmed.</div>}
-          {swapError && (
-            <div>
-              Error: {(error as BaseError).shortMessage || error?.message}
-            </div>
-          )}
           <div className="md:w-1/4">
             <div className="md:hidden w-screen h-50">
               <MobileRecordButton setParsedResponse={setParsedResponse} />
