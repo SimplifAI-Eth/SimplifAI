@@ -56,6 +56,15 @@ async function swapLogic(walletAddress: string, price: string, signal: string) {
   }
 }
 
+// Function to handle push notifications
+const handleMessageSend = async (receiverAddress: string, message: string) => {
+  await sendMessage({
+    receiverAdr: receiverAddress,
+    message: message,
+  });
+  console.log("message and notification sent")
+}
+
 export default function Home() {
   // for notifications
   const [api, contextHolder] = notification.useNotification();
