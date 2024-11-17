@@ -1,8 +1,5 @@
 import { TappdClient } from "@phala/dstack-sdk";
-<<<<<<< HEAD
-=======
 // import "dotenv/config";
->>>>>>> origin/main
 
 export const dynamic = "force-dynamic";
 

@@ -429,21 +429,6 @@ export default function Home() {
       }
     }
 
-<<<<<<< HEAD
-  return (
-    <>
-      {contextHolder}
-      {isLoggedIn ? (
-        <div className="w-full h-screen flex-col flex items-center gap-4 -mt-8">
-          {hash && <div>Transaction Hash: {hash}</div>}
-          {isConfirming && <div>Waiting for confirmation...</div>}
-          {isConfirmed && <div>Transaction confirmed.</div>}
-          {error && (
-            <div>
-              Error: {(error as BaseError).shortMessage || error.message}
-            </div>
-          )}
-=======
     return (
       <>
         {isLoggedIn ? (
@@ -456,7 +441,6 @@ export default function Home() {
                 Error: {(error as BaseError).shortMessage || error.message}
               </div>
             )}
->>>>>>> origin/main
 
             {swapHash && <div>Transaction Hash: {swapHash}</div>}
             {isSwapConfirming && <div>Waiting for confirmation...</div>}
@@ -495,18 +479,6 @@ export default function Home() {
               />
             </div>
           </div>
-<<<<<<< HEAD
-        </div>
-      ) : (
-        <div className="flex text-xl mt-24 font-semibold justify-center text-center w-full items-center">
-          <p className="w-2/3">
-            Please connect your wallet to use our features.
-          </p>
-        </div>
-      )}
-    </>
-  );
-=======
         ) : (
           <div className="flex text-xl mt-24 font-semibold justify-center text-center w-full items-center">
             <p className="w-2/3">
@@ -517,5 +489,4 @@ export default function Home() {
       </>
     );
   }
->>>>>>> 1fe978e957ef8c18bbe0db104d7db30d4575c022
 }
